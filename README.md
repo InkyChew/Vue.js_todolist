@@ -1,2 +1,4 @@
-# Vue.js_todolist
-use vue.js to create a to-do-list
+# Demo
+https://inkychew.github.io/todolist/ </br>
+# Use
+* Vue.js
