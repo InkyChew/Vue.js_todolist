@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>MyToDoList</title>
+
+    <style>
+            .completed {
+              text-decoration: line-through;
+              color: #a0a0a0;
+            }
+          </style>
+  </head>
+  <body>    
+    <div id="todoapp" class="container">
+        <h1 class="text-center my-4">TODOS</h1>
+        <div class="row my-4">
+            <div class="col-10">
+                <input type="text" class="form-control"
+                        v-model.trim="newtask"
+                        v-on:keyup.enter="add(newtask)"
+                        placeholder="What needs to be down?"
+                        autofocus autocomplete="off">
+            </div>
+            <div class="col-2 text-right">
+                <button type="button" class="btn btn-primary" v-on:click="add(newtask)">add</button>
+            </div>
+        </div>
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+              <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">All</a>
+              <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Active</a>
+              <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Completed</a>
+            </div>
+          </nav>
+          <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                <div class="row">
+                    <div class="col-12">
+                        <ul class="list-group">
+                            <li class="list-group-item" v-for="todo in todos">
+                                <div class="row">
+                                    <div class="col-10" v-if="!todo.edit">
+                                        <input type="checkbox" v-model="todo.completed"></input>
+                                        <label class="align-middle" v-on:dblclick="edit(todo)"  v-bind:class="{'completed' : todo.completed}">{{todo.content}}</label>
+                                    </div>
+                                    <div class="col-10" v-if="todo.edit">
+                                        <input type="text" class="form-control" 
+                                                v-focus
+                                                v-model.trim="editask"
+                                                v-on:keyup.enter="editdone(todo)"
+                                                v-on:blur="editdone(todo)">
+                                        </input>
+                                    </div>
+                                    <div class="col-2 text-right">
+                                        <button type="button" class="btn btn-outline-primary" v-on:click="edit(todo)">edit</button>
+                                        <button type="button" class="btn btn-outline-danger" v-on:click="remove(todo)">delete</button>
+                                    </div>
+                                </div>          
+                            </li>
+                        </ul>
+                    </div>
+                </div>  
+            </div>
+            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                <div class="row">
+                    <div class="col-12">
+                        <ul class="list-group">
+                            <li class="list-group-item" v-for="todo in todos" v-if="!todo.completed">
+                                <div class="row">
+                                    <div class="col-10" v-if="!todo.edit">
+                                        <input type="checkbox" v-model="todo.completed"></input>
+                                        <label class="align-middle" v-on:dblclick="edit(todo)"  v-bind:class="{'completed' : todo.completed}">{{todo.content}}</label>
+                                    </div>
+                                    <div class="col-10" v-if="todo.edit">
+                                        <input type="text" class="form-control" 
+                                                v-focus
+                                                v-model.trim="editask"
+                                                v-on:keyup.enter="editdone(todo)"
+                                                v-on:blur="editdone(todo)">
+                                        </input>
+                                    </div>
+                                    <div class="col-2 text-right">
+                                        <button type="button" class="btn btn-outline-primary" v-on:click="edit(todo)">edit</button>
+                                        <button type="button" class="btn btn-outline-danger" v-on:click="remove(todo)">delete</button>
+                                    </div>
+                                </div>          
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+                <div class="row">
+                    <div class="col-12">
+                        <ul class="list-group">
+                            <li class="list-group-item" v-for="todo in todos" v-if="todo.completed">
+                                <div class="row">
+                                    <div class="col-10" v-if="!todo.edit">
+                                        <input type="checkbox" v-model="todo.completed"></input>
+                                        <label class="align-middle" v-on:dblclick="edit(todo)"  v-bind:class="{'completed' : todo.completed}">{{todo.content}}</label>
+                                    </div>
+                                    <div class="col-10" v-if="todo.edit">
+                                        <input type="text" class="form-control" 
+                                                v-focus
+                                                v-model.trim="editask"
+                                                v-on:keyup.enter="editdone(todo)"
+                                                v-on:blur="editdone(todo)">
+                                        </input>
+                                    </div>
+                                    <div class="col-2 text-right">
+                                        <button type="button" class="btn btn-outline-primary" v-on:click="edit(todo)">edit</button>
+                                        <button type="button" class="btn btn-outline-danger" v-on:click="remove(todo)">delete</button>
+                                    </div>
+                                </div>          
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row my-4 mx-2">
+            <div class="col-6">{{remaining}}</div>
+            <div class="col-6 text-right">
+                <button type="button" class="btn btn-outline-primary" v-on:click="clear()">Clear completed</button>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- My Vue.js -->
+    <script type="text/javascript" src="todoapp.js"></script>
+    
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>
